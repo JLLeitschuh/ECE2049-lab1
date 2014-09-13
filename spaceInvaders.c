@@ -117,25 +117,15 @@ void main(void){
 			// Fill an array of the alien with random variables
 			// May need to check that the same spot is not being filled more than once with an array of some sort
 			if (level == 0){
-				for (numAliens = 0; numAliens < 3; numAliens++){
-					aliens[numAliens].x = numAliens+1;
-					aliens[numAliens].y = 10;
-					//aliens[numAliens].shape = 'X';
-				}
 				counter = 3;
 			} 
-
 			if (level == 1){
-				for (numAliens = 0; numAliens < 5; numAliens++){
-					aliens[numAliens].x = numAliens+1;
-					aliens[numAliens].y = 10;
-					//aliens[numAliens].shape = 'X';
-				}
 				counter = 5;
 			}
-
 			if (level == 2){
-				for (numAliens = 0; numAliens < 10; numAliens++){
+				counter = 10;
+			}
+			for (numAliens = 0; numAliens < counter; numAliens++){
 					if (numAliens < 4){
 						aliens[numAliens].x = numAliens-4;
 						aliens[numAliens].y = 20;
@@ -146,8 +136,6 @@ void main(void){
 						//aliens[numAliens].shape = "X";
 					}
 				}
-				counter = 10;
-			}
 
 			// Draw the aliens
 			while (counter != 0){
