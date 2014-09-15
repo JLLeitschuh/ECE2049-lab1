@@ -1,4 +1,4 @@
-/* 
+/*
  * This program will be used to create the space invader game
  * It uses the code given in the demo5529.c file as a base
  * Written by: Susan Jarvis
@@ -20,9 +20,14 @@
  * the LEDs and cap touch buttons are implemented. It is useful
  * to organize your code by putting like functions together in
  * files. You include the header associated with that file(s)
- * into the main file of your project. 
+ * into the main file of your project.
  */
- #include "peripherals.h"
+#include "peripherals.h"
+#include "Display.h"
+#include "Game.h"
+
+
+#define BUTTON_X BIT0
 
  // define the alien struct
 struct alien{
@@ -38,6 +43,8 @@ struct alien aliens[10];
 // Function prototypes for this file
 void swDelay(char numLoops);
 void generateNewGameField(int count);
+
+
 
 // Main Function
 void main(void){
@@ -113,12 +120,12 @@ void main(void){
 			GrFlush(&g_sContext);
 			swDelay(1);
 			GrClearDisplay(&g_sContext);
-			
+
 			// Fill an array of the alien with random variables
 			// May need to check that the same spot is not being filled more than once with an array of some sort
 			if (level == 0){
 				counter = 3;
-			} 
+			}
 			if (level == 1){
 				counter = 5;
 			}
@@ -175,7 +182,7 @@ void main(void){
 				counter--;
 			}
 			GrFlush(&g_sContext);
-			// reset i 
+			// reset i
 			i = 0;
 		}
 
@@ -266,6 +273,3 @@ void generateNewGameField(int count){
 		}
 	}
 }*/
-
-
-

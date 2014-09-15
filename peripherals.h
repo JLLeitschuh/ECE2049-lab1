@@ -32,12 +32,9 @@
 // write #define statements for each button
 typedef uint8_t CAP_BUTTON;
 
-#define BUTTON_NONE 0x00; // No buttons pressed
-#define BUTTON_X 0x01
-#define BUTTON_SQUARE 0x02
-#define BUTTON_OCT 0x04
-#define BUTTON_TRIANGLE 0x08
-#define BUTTON_CIRCLE 0x10
+#define BUTTON_NONE 0x00   // No buttons pressed
+// Add definitions here...
+
 
 // Globals
 extern tContext g_sContext;	// user defined type used by graphics library
