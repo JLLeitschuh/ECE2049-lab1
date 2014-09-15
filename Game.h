@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #define gameFieldSizeX 5
-#define gameFieldSizeY 4
+#define gameFieldSizeY 8
 
 
 extern int gameField[gameFieldSizeX][gameFieldSizeY];

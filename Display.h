@@ -14,7 +14,7 @@
 
 #include "Game.h"
 
-#define MAX_X 102
+#define MAX_X 112 //Actual screen max is 102
 #define MAX_Y 64
 
 #define POSITION_MULTIPLIER_X  ((MAX_X) / (gameFieldSizeX + 1))

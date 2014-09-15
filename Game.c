@@ -19,10 +19,10 @@ void generateNewGameField(int count){
 
 	//Now set the values of the array.
 	while(count != 0){
-		int x;
-		for(x = 0; x < gameFieldSizeX; x++){
-			int y;
-			for(y = gameFieldSizeY-1; 0 < y; y--){
+		int y;
+		for(y = gameFieldSizeY-1; 0 < y; y--){
+			int x;
+			for(x = 0; x < gameFieldSizeX; x++){
 				if(gameField[x][y] == 0){
 					gameField[x][y] = rand() % 2;
 					if(gameField[x][y] != 0){

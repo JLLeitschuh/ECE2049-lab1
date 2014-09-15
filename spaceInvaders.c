@@ -165,11 +165,12 @@ void main(void){
 			int rowKilled = getRowFromButton(keypressed_state);
 			if(rowKilled != -1){
 				uint16_t levelWon = killColumn(rowKilled);
+				displayAliens();
 				if(levelWon == 1){
 					//Level has been won
 					state = LEVEL_WON;
+					break;
 				}
-				displayAliens();
 			}
 
 			state = MOVE_ALIENS;
@@ -181,12 +182,13 @@ void main(void){
 			//numAliens--;
 			break;
 		case MOVE_ALIENS: // Move Aliens
-			if(moveAlienCount % (20 / (1 + level)) == 0){ //The + 1 is to prevent a devide by zero error
+			if(moveAlienCount % (50 / (1 + level)) == 0){ //The + 1 is to prevent a devide by zero error
 				int gameOver = performAlienMovement();
-				if(gameOver == 1){
-
-				}
 				displayAliens();
+				if(gameOver == 1){
+					state = GAME_OVER;
+					break;
+				}
 			}
 			state = CHECK_CAP_PADS;
 
@@ -194,13 +196,25 @@ void main(void){
 			break;
 		case LEVEL_WON:
 			//Display move on
-
 			GrClearDisplay(&g_sContext);
-			GrStringDrawCentered(&g_sContext, "3!", AUTO_STRING_LENGTH, 51, 16, TRANSPARENT_TEXT);
+			GrStringDrawCentered(&g_sContext, "LEVEL UP!", AUTO_STRING_LENGTH, 51, 16, TRANSPARENT_TEXT);
 			GrFlush(&g_sContext);
 			swDelay(1);
+
+			level ++;
+			state = COUNTDOWN;
+			break;
 		case GAME_OVER:
-			//Display shame
+			//Display Game Over!
+			GrClearDisplay(&g_sContext);
+			GrStringDrawCentered(&g_sContext, "THE ALIENS KILLED", AUTO_STRING_LENGTH, 51, 16, TRANSPARENT_TEXT);
+			GrStringDrawCentered(&g_sContext, "THE ENTIRE HUMAN", AUTO_STRING_LENGTH, 51, 32, TRANSPARENT_TEXT);
+			GrStringDrawCentered(&g_sContext, "RACE", AUTO_STRING_LENGTH, 51, 48, TRANSPARENT_TEXT);
+			GrFlush(&g_sContext);
+			swDelay(3);
+
+			level = 0;
+			state = WELCOME;
 			break;
 		}
 

@@ -6,6 +6,10 @@
 void displayAliens(){
 	GrClearDisplay(&g_sContext);
 	//Iterate over the gameField
+	GrStringDrawCentered(&g_sContext, "O", AUTO_STRING_LENGTH, MAX_X, MAX_Y, TRANSPARENT_TEXT);
+	GrStringDrawCentered(&g_sContext, "O", AUTO_STRING_LENGTH, 0, MAX_Y, TRANSPARENT_TEXT);
+	GrStringDrawCentered(&g_sContext, "O", AUTO_STRING_LENGTH, MAX_X, 0, TRANSPARENT_TEXT);
+	GrStringDrawCentered(&g_sContext, "O", AUTO_STRING_LENGTH, 0, 0, TRANSPARENT_TEXT);
 	int x;
 	for(x = 0; x < gameFieldSizeX; x++){
 		int y;
