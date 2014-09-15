@@ -1,6 +1,6 @@
 #ifndef _DISPLAY_H_
 #define _DISPLAY_H_
-#include "Game.h"
+
 #include <msp430.h>
 #include <stdint.h>
 #include "inc\hw_memmap.h"
@@ -11,6 +11,8 @@
 
 #include "grlib.h"
 #include "LcdDriver/Dogs102x64_UC1701.h"
+
+#include "Game.h"
 
 #define MAX_X 102
 #define MAX_Y 64

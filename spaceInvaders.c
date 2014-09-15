@@ -27,7 +27,11 @@
 #include "Game.h"
 
 
-#define BUTTON_X BIT0
+#define BUTTON_X   BIT0
+#define BUTTON_SQU BIT1
+#define BUTTON_OCT BIT2
+#define BUTTON_TRI BIT3
+#define BUTTON_CIR BIT4
 
  // define the alien struct
 struct alien{
@@ -40,9 +44,29 @@ struct alien{
 long stringWidth = 0;
 struct alien aliens[10];
 
+typedef enum{
+	WELCOME,
+	COUNTDOWN,
+	CHECK_CAP_PADS,
+	MOVE_ALIENS,
+	LEVEL_WON,
+	GAME_OVER
+} GameState;
+
 // Function prototypes for this file
 void swDelay(char numLoops);
 void generateNewGameField(int count);
+
+int getRowFromButton(int buttonIn){
+	switch(buttonIn){
+	case BUTTON_X: return 0;
+	case BUTTON_SQU: return 1;
+	case BUTTON_OCT: return 2;
+	case BUTTON_TRI: return 3;
+	case BUTTON_CIR: return 4;
+	default: return -1;
+	}
+}
 
 
 
@@ -50,8 +74,11 @@ void generateNewGameField(int count);
 void main(void){
 
 	// Variables
-	int state = 0;
+	GameState state = WELCOME;
 	int level = 0;
+	//Keeps track of the number of times we have attempted to move the aliens.
+	uint16_t moveAlienCount = 1;
+
 	int numAliens, counter;
 	long long int i = 0;
 	int gameStarted = 0;
@@ -79,18 +106,9 @@ void main(void){
 			P1OUT &= ~(keypressed_state << 1);
 		}
 
-		// if the X Pad is pressed the state should be set to start the countdown and then draw the aliens
-		if (keypressed_state == BUTTON_X && gameStarted == 0){
-			state = 1;
-		}
-
-		if (keypressed_state && gameStarted == 1){
-
-		}
-
 		//Run a switch statement that controls the flow of the game
 		switch (state) {
-		case 0: // Display the welcome screen
+		case WELCOME: // Display the welcome screen
 			GrClearDisplay(&g_sContext);
 			GrStringDrawCentered(&g_sContext, "Space Invaders!!", AUTO_STRING_LENGTH, 51, 16, TRANSPARENT_TEXT);
 			GrStringDrawCentered(&g_sContext, "Press X to Start!", AUTO_STRING_LENGTH, 51, 32, TRANSPARENT_TEXT);
@@ -98,11 +116,11 @@ void main(void){
 
 			// if the X Pad is pressed the state should be set to start the countdown and then draw the aliens
 			if (keypressed_state == BUTTON_X){
-				state = 1;
+				state = COUNTDOWN;
 			}
 			break;
 
-		case 1: // Countdown and generate the aliens
+		case COUNTDOWN: // Countdown and generate the aliens
 			GrClearDisplay(&g_sContext);
 			GrStringDrawCentered(&g_sContext, "3!", AUTO_STRING_LENGTH, 51, 16, TRANSPARENT_TEXT);
 			GrFlush(&g_sContext);
@@ -132,35 +150,29 @@ void main(void){
 			if (level == 2){
 				counter = 10;
 			}
-			for (numAliens = 0; numAliens < counter; numAliens++){
-					if (numAliens < 4){
-						aliens[numAliens].x = numAliens-4;
-						aliens[numAliens].y = 20;
-						//aliens[numAliens].shape = 'X';
-					} else {
-						aliens[numAliens].x = numAliens+1;
-						aliens[numAliens].y = 10;
-						//aliens[numAliens].shape = "X";
-					}
-				}
+			generateNewGameField(counter);
+			displayAliens();
 
-			// Draw the aliens
-			while (counter != 0){
-				GrStringDrawCentered(&g_sContext, "X", AUTO_STRING_LENGTH, aliens[counter-1].x*20, aliens[counter-1].y, TRANSPARENT_TEXT);
-				counter--;
-			}
-			GrFlush(&g_sContext);
-			state = 2;
-			gameStarted = 1;
-			i = 0;
+			state = CHECK_CAP_PADS;
 			break;
 
-		case 2: // Check the Capacitive pads
+		case CHECK_CAP_PADS: // Check the Capacitive pads
 
 			// Check cap touch keys
 			keypressed_state = CapButtonRead();
 			// if a buttons is pushed shoot the "alien" in that spot (Remove it from the screen)
 
+			int rowKilled = getRowFromButton(keypressed_state);
+			if(rowKilled != -1){
+				uint16_t levelWon = killColumn(rowKilled);
+				if(levelWon == 1){
+					//Level has been won
+					state = LEVEL_WON;
+				}
+				displayAliens();
+			}
+
+			state = MOVE_ALIENS;
 
 			// check the position of the  button pushed and remove the alien in the array with the lowest
 			// y value with the given x value. Then loop to rewrite the array to the screen
@@ -168,8 +180,31 @@ void main(void){
 			//counter = numAliens-1;
 			//numAliens--;
 			break;
+		case MOVE_ALIENS: // Move Aliens
+			if(moveAlienCount % (20 / (1 + level)) == 0){ //The + 1 is to prevent a devide by zero error
+				int gameOver = performAlienMovement();
+				if(gameOver == 1){
+
+				}
+				displayAliens();
+			}
+			state = CHECK_CAP_PADS;
+
+			moveAlienCount ++;
+			break;
+		case LEVEL_WON:
+			//Display move on
+
+			GrClearDisplay(&g_sContext);
+			GrStringDrawCentered(&g_sContext, "3!", AUTO_STRING_LENGTH, 51, 16, TRANSPARENT_TEXT);
+			GrFlush(&g_sContext);
+			swDelay(1);
+		case GAME_OVER:
+			//Display shame
+			break;
 		}
 
+		/*
 		// move the aliens down the screen
 		// level zero speed
 		if (i == 50 && gameStarted == 1){
@@ -228,6 +263,7 @@ void main(void){
 		}
 
 		i++;
+		*/
 	}
 }
 

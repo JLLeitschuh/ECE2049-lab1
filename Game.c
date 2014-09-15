@@ -1,11 +1,23 @@
 #include "Game.h"
 
+ int gameField[gameFieldSizeX][gameFieldSizeY];
+
 /**
  * Generates a game field using random values.
  * Allows you to generate the field with a given number of aliens
  * @param count The number of ailiens to generate on the field.
  */
 void generateNewGameField(int count){
+	//Initalize the array to all zeros.
+	int x;
+	for(x = 0; x < gameFieldSizeX; x ++){
+		int y;
+		for(y = 0; y < gameFieldSizeY; y++){
+			gameField[x][y] = 0;
+		}
+	}
+
+	//Now set the values of the array.
 	while(count != 0){
 		int x;
 		for(x = 0; x < gameFieldSizeX; x++){
@@ -74,7 +86,6 @@ int _isLevelWon(){
  * @return 1 when the game is won by the user.
  */
 int killColumn(uint16_t column){
-	assert (column >= 0);
 	assert (column < gameFieldSizeX);
 
 	int y;
